@@ -1,0 +1,19 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "server for intern project 2 ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/luanvo1910/Server_OJT7T4.git"
+  },
+  "author": "Luan_7t4",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/luanvo1910/Server_OJT7T4/issues"
+  },
+  "homepage": "https://github.com/luanvo1910/Server_OJT7T4#readme"
+}
