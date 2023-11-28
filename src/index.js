@@ -8,7 +8,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const cors = require('cors');
 app.use(cors());
 
-// const route = require('./routes');
-// route(app);
+const route = require('./routes');
+route(app);
 
 module.exports = app;
