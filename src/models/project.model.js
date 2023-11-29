@@ -13,10 +13,10 @@ const Project = new Schema({
         type: Date, 
         default: Date.now
     },
-    technical: {
+    technical: [{
         type: Schema.Types.ObjectId, 
         ref: Technical
-    },
+    }],
 })
 
 module.exports = mongoose.model('Project', Project);
