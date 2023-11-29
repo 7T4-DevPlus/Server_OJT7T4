@@ -23,8 +23,7 @@ const Employee = new Schema({
         unique: true
     },
     image: {
-        type: String,
-        default: 'https://res.cloudinary.com/dfz0xsh2d/image/upload/v1701264967/React_7T4/user_gnjxva.png'
+        type: String
     },
     identity: {
         type: String,

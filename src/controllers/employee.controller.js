@@ -1,11 +1,14 @@
 const { response } = require('express');
+const multer = require("multer");
+const cloudinary = require("../utils/cloudinary");
 const Employee = require('../models/employee.model');
 const Technical = require('../models/technical.model');
 
 class EmployeeController {
     async create(req, res) {
-        const {name, code, phone, email, image, identity, gender, technical} = req.body;
-        console.log(req.body);
+        const {name, code, phone, email, identity, gender, technical} = req.body;
+        console.log(req);
+        // const image = await cloudinary.uploader.upload(req.file.path);
         const employee = await Employee.findOne({email});
         if (employee) {
             return res
@@ -18,7 +21,7 @@ class EmployeeController {
                 code,
                 phone,
                 email,
-                image,
+                // image: image.secure_url,
                 identity,
                 gender,
                 technical
@@ -27,7 +30,7 @@ class EmployeeController {
 
             res.json({ success: true, message: 'Employee added successfully', employee: newEmployee})
         } catch (error) {
-            console.log(error)
+            // console.log(error)
 		    res.status(500).json({ success: false, message: 'Internal server error' })
         }
     }
@@ -49,7 +52,8 @@ class EmployeeController {
     }
 
     async update (req,res) {
-        const {name, code, phone, email, image, identity, gender, isAvailable, isManager, isDelete, technical} = req.body
+        const {name, code, phone, email, identity, gender, isAvailable, isManager, isDelete, technical} = req.body;
+        const image = await cloudinary.uploader.upload(req.file.path);
         const employee = await  Employee.find({_id: req.params._id});
 
         try{
@@ -58,7 +62,7 @@ class EmployeeController {
                 code: code || employee.code,
                 phone: phone || employee.phone,
                 email: email || employee.email,
-                image: image || employee.image,
+                image: image.secure_url || employee.image,
                 identity: identity || employee.identity,
                 gender: gender || employee.gender,
                 isAvailable: isAvailable || employee.isAvailable,
@@ -68,7 +72,7 @@ class EmployeeController {
             }
             const updateCondition = {_id: req.params._id}
 
-            updatedEmployee = await Employee.findOneAndUpdate(updateCondition, updatedEmployee, {new: true})
+            updatedEmployee = await Employee.findByIdAndUpdate(updateCondition, updatedEmployee, {new: true})
 
             if(!updatedEmployee)
             return res.status(401).json({success: false, message: 'Employee not found'})
