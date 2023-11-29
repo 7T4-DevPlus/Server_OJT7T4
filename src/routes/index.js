@@ -7,8 +7,8 @@ function route(app) {
 
 app.use('/auth', authRouter);
 app.use('/employees', employeeRoute);
-app.use('/technical', techRoute);
-app.use('/role', roleRoute);
+app.use('/technicals', techRoute);
+app.use('/roles', roleRoute);
 
 }
 
