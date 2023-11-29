@@ -3,16 +3,50 @@ const Schema = mongoose.Schema;
 const Technical = require('./technical.model');
 
 const Employee = new Schema({
-    name: String,
-    code: String,
-    phone: String,
-    email: String,
-    image: String,
-    identity: String,
-    gender: String,
-    isAvailable: Boolean,
-    isManager: Boolean,
-    isDelete: Boolean,
+    name: {
+        type: String,
+        required: true
+    },
+    code: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    phone: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    email: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    image: {
+        type: String,
+        default: 'https://res.cloudinary.com/dfz0xsh2d/image/upload/v1701264967/React_7T4/user_gnjxva.png'
+    },
+    identity: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    gender: {
+        type: String,
+        required: true
+    },
+    isAvailable:{
+        type: Boolean, 
+        default: true
+    },
+    isManager: {
+        type: Boolean, 
+        default: false
+    },
+    isDelete: {
+        type: Boolean, 
+        default: false
+    },
     createAt: {
         type: Date, 
         default: Date.now
