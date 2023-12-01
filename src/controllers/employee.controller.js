@@ -77,7 +77,7 @@ class EmployeeController {
             if(!updatedEmployee)
             return res.status(401).json({success: false, message: 'Employee not found'})
 
-            res.json({success: true, message: 'Employee updated successfully'})
+            res.json({success: true, message: 'Employee updated successfully', employee: updatedEmployee})
 
         }
         catch (error){
