@@ -2,7 +2,6 @@ const { response } = require('express');
 const multer = require("multer");
 const cloudinary = require("../utils/cloudinary");
 const Employee = require('../models/employee.model');
-const Technical = require('../models/technical.model');
 
 class EmployeeController {
     async create(req, res) {
@@ -11,12 +10,12 @@ class EmployeeController {
         try {
             const image = await cloudinary.uploader.upload(req.file.path);
 
-            console.log(image)
-
             const employee = await Employee.findOne({ email });
-            if (employee) {
+            if (employee && employee.isDelete == false) {
                 return res.status(400).json({ success: false, message: 'Employee already exists' });
             }
+
+            const technicalIds = JSON.parse(technical);
 
             const newEmployee = new Employee({
                 name,
@@ -26,12 +25,13 @@ class EmployeeController {
                 image: image.secure_url,
                 identity,
                 gender,
-                technical
+                technical: technicalIds
             });
 
             await newEmployee.save();
 
             res.json({ success: true, message: 'Employee added successfully', employee: newEmployee });
+            console.log(newEmployee)
         } catch (error) {
             console.error('Error:', error);
             res.status(500).json({ success: false, message: 'Internal server error' });
@@ -55,9 +55,10 @@ class EmployeeController {
     }
 
     async update(req, res) {
-        const { name, code, phone, email, identity, gender, isAvailable, isManager, isDelete, technical } = req.body;
+        const { name, code, phone, email, identity, gender, isAvailable, isManager, technical } = req.body;
         const image = await cloudinary.uploader.upload(req.file.path);
         const employee = await Employee.find({ _id: req.params._id });
+        const technicalIds = JSON.parse(technical);
 
         try {
             let updatedEmployee = {
@@ -70,8 +71,7 @@ class EmployeeController {
                 gender: gender || employee.gender,
                 isAvailable: isAvailable || employee.isAvailable,
                 isManager: isManager || employee.isManager,
-                isDelete: isDelete || employee.isDelete,
-                technical: technical || employee.technical,
+                technical: technicalIds || employee.technical,
             }
             const updateCondition = { _id: req.params._id }
 
@@ -91,8 +91,12 @@ class EmployeeController {
 
     async delete(req, res) {
         try {
-            const deleteCondition = { _id: req.params._id }
-            const deletedEmployee = await Employee.findOneAndDelete(deleteCondition)
+            const employeeId = { _id: req.params._id }
+            let deletedEmployee = {
+                isDelete: true,
+            }
+
+            deletedEmployee = await Employee.findByIdAndUpdate(employeeId, deletedEmployee, { new: true })
 
             if (!deletedEmployee)
                 return res.status(401).json({ success: false, message: 'Employee not found' })
