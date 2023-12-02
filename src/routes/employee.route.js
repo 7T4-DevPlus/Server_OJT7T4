@@ -6,9 +6,9 @@ const upload = require("../utils/multer");
 const controller = require('../controllers/employee.controller');
 
 router.get('/', controller.list);
-router.get('/details/:_id', controller.details);
+router.get('/:_id', controller.details);
 router.post('/create', upload.single("image"), controller.create);
 router.patch('/update/:_id', upload.single("image"), controller.update);
-router.delete('/delete/:_id', controller.delete);
+router.patch('/delete/:_id', controller.delete);
 
 module.exports = router;
