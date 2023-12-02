@@ -7,8 +7,8 @@ const controller = require('../controllers/employee.controller');
 
 router.get('/', controller.list);
 router.get('/details/:_id', controller.details);
-router.post('/create', controller.create, upload.single("image"));
-router.patch('/update/:_id', controller.update, upload.single("image"));
+router.post('/create', upload.single("image"), controller.create);
+router.patch('/update/:_id', upload.single("image"), controller.update);
 router.delete('/delete/:_id', controller.delete);
 
 module.exports = router;

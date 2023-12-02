@@ -1,10 +1,14 @@
 const Technical = require('../models/technical.model');
 
 class TechController {
-    list(res, next) {
-        Technical.find({})
-        .then(techs => res.json({success: true, techs}))
-        .catch(err => next(err));
+    async list(req, res) {
+        try {
+            const technicals = await Technical.find({});
+            res.json({ success: true, technicals })
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({ success: false, message: 'Internal server error' })
+        }
     }
 
     create(req, res) {
