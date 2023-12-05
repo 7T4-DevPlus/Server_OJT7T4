@@ -34,7 +34,7 @@ class ProjectController {
 
     async list(req, res) {
         try {
-            const projects = await Project.find({});
+            const projects = await Project.find({}).populate('technical');
             res.json({ success: true, projects })
         } catch (error) {
             console.log(error)
@@ -43,7 +43,7 @@ class ProjectController {
     }
 
     details(req, res, next) {
-        Project.find({ _id: req.params._id })
+        Project.find({ _id: req.params._id }).populate('technical')
             .then(project => res.json(project))
             .catch(err => next(err));
     }

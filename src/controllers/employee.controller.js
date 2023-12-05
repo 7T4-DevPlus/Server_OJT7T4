@@ -40,7 +40,7 @@ class EmployeeController {
 
     async list(req, res) {
         try {
-            const employees = await Employee.find({});
+            const employees = await Employee.find({}).populate('technical');
             res.json({ success: true, employees })
         } catch (error) {
             console.log(error)
@@ -49,7 +49,7 @@ class EmployeeController {
     }
 
     details(req, res, next) {
-        Employee.find({ _id: req.params._id })
+        Employee.find({ _id: req.params._id }).populate('technical')
             .then(employee => res.json(employee))
             .catch(err => next(err));
     }
