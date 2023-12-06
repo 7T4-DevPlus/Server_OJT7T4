@@ -8,7 +8,10 @@ const EmployeeInProject = new Schema({
     description: String,
     joinDate: Date,
     outDate: Date,
-    isWorking: Boolean,
+    isWorking: {
+        type: Boolean,
+        default: true
+    },
     role: {
         type: Schema.Types.ObjectId, 
         ref: Role

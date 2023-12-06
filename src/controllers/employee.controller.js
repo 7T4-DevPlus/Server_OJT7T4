@@ -2,6 +2,7 @@ const { response } = require('express');
 const multer = require("multer");
 const cloudinary = require("../utils/cloudinary");
 const Employee = require('../models/employee.model');
+const EmployeeProject = require('../models/employeeProject.model');
 
 class EmployeeController {
     async create(req, res) {
@@ -40,7 +41,7 @@ class EmployeeController {
 
     async list(req, res) {
         try {
-            const employees = await Employee.find({}).populate('technical');
+            const employees = await Employee.find({isDelete: false}).populate('technical');
             res.json({ success: true, employees })
         } catch (error) {
             console.log(error)
