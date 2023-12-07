@@ -51,14 +51,19 @@ class EmployeeController {
     }
 
     details(req, res, next) {
-        Employee.find({ _id: req.params._id }).populate('technical')
+        Employee.findOne({ _id: req.params._id }).populate('technical')
             .then(employee => res.json(employee))
             .catch(err => next(err));
     }
 
     async update(req, res) {
         const { name, code, phone, email, identity, gender, isAvailable, isManager, technical } = req.body;
-        const image = await cloudinary.uploader.upload(req.file.path);
+        console.log(req.body);
+        let imageUrl = null;
+        if(req.file) {
+            const image = await cloudinary.uploader.upload(req.file.path);
+            imageUrl = image.secure_url
+        }
         const employee = await Employee.find({ _id: req.params._id });
         const technicalIds = JSON.parse(technical);
 
@@ -68,7 +73,7 @@ class EmployeeController {
                 code: code || employee.code,
                 phone: phone || employee.phone,
                 email: email || employee.email,
-                image: image.secure_url || employee.image,
+                image: imageUrl || employee.image,
                 identity: identity || employee.identity,
                 gender: gender || employee.gender,
                 isAvailable: isAvailable || employee.isAvailable,
