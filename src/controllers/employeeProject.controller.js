@@ -1,5 +1,6 @@
 const { response } = require('express');
 const EmployeeProject = require('../models/employeeProject.model');
+const Employee = require('../models/employee.model');
 
 class EmployeeProjectController {
     async getEmployeeHistory(req, res) {
@@ -16,7 +17,7 @@ class EmployeeProjectController {
     async getEmployeeInProject(req, res) {
         const projectId = req.params._id;
         try {
-            const employees = await EmployeeProject.find({projectId: projectId}).populate('role').populate('employeeId').populate('projectId')
+            const employees = await EmployeeProject.find({projectId: projectId}).populate('role').populate('employeeId').populate('projectId');
             res.json({ success: true, employees })
         } catch (error) {
             console.log(error)
@@ -36,10 +37,16 @@ class EmployeeProjectController {
                 employeeId,
                 projectId,
             });
-
             await newEmployeeInProject.save();
 
-            res.json({ success: true, message: 'Employee added successfully', employee: newEmployeeInProject });
+            let updatedEmployee = {
+                isAvailable: false,
+            }
+            updatedEmployee = await Employee.findByIdAndUpdate(employeeId, updatedEmployee, { new: true });
+
+            const employees = await EmployeeProject.find({projectId: projectId}).populate('role').populate('employeeId').populate('projectId');
+
+            res.json({ success: true, message: 'Employee added successfully', employees: employees });
             console.log(newEmployeeInProject)
         } catch (error) {
             console.log(error)
@@ -52,8 +59,12 @@ class EmployeeProjectController {
             let removedEmployee = {
                 isWorking: false,
             }
+            removedEmployee = await EmployeeProject.findByIdAndUpdate(req.params._id, removedEmployee, { new: true });
 
-            removedEmployee = await EmployeeProject.findByIdAndUpdate(req.params._id, removedEmployee, { new: true })
+            let updatedEmployee = {
+                isAvailable: true,
+            }
+            updatedEmployee = await Employee.findByIdAndUpdate(employeeId, updatedEmployee, { new: true });
 
             if (!removedEmployee)
                 return res.status(401).json({ success: false, message: 'Employee not found' })

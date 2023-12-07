@@ -2,7 +2,6 @@ const { response } = require('express');
 const multer = require("multer");
 const cloudinary = require("../utils/cloudinary");
 const Employee = require('../models/employee.model');
-const EmployeeProject = require('../models/employeeProject.model');
 
 class EmployeeController {
     async create(req, res) {
@@ -31,7 +30,9 @@ class EmployeeController {
 
             await newEmployee.save();
 
-            res.json({ success: true, message: 'Employee added successfully', employee: newEmployee });
+            const employees = await Employee.find({isDelete: false}).populate('technical');
+
+            res.json({ success: true, message: 'Employee added successfully', employees: employees });
             console.log(newEmployee)
         } catch (error) {
             console.error('Error:', error);

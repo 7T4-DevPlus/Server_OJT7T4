@@ -24,7 +24,9 @@ class ProjectController {
 
             await newProject.save();
 
-            res.json({ success: true, message: 'Project added successfully', project: newProject });
+            const projects = await Project.find({}).populate('technical');
+
+            res.json({ success: true, message: 'Project added successfully', projects: projects });
             console.log(newProject)
         } catch (error) {
             console.error('Error:', error);
