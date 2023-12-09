@@ -30,7 +30,7 @@ class ProjectController {
             console.log(newProject)
         } catch (error) {
             console.error('Error:', error);
-            res.status(500).json({ success: false, message: 'Internal server error' });
+            res.status(500).json({ success: false, message: 'Internal server error - Project added failed' });
         }
     }
 
@@ -45,7 +45,7 @@ class ProjectController {
     }
 
     details(req, res, next) {
-        Project.find({ _id: req.params._id }).populate('technical')
+        Project.findOne({ _id: req.params._id }).populate('technical')
             .then(project => res.json(project))
             .catch(err => next(err));
     }
@@ -78,7 +78,7 @@ class ProjectController {
         }
         catch (error) {
             console.log(error)
-            res.status(500).json({ success: false, message: 'Internal server error' })
+            res.status(500).json({ success: false, message: 'Internal server error - Project updated failed' })
         }
     }
 
@@ -97,7 +97,7 @@ class ProjectController {
             res.json({ success: true, message: 'Project closed successfully' })
         } catch (error) {
             console.log(error)
-            res.status(404).json({ success: false, message: 'Internal Server Error' })
+            res.status(404).json({ success: false, message: 'Internal Server Error - Project closed failed' })
         }
     }
 }

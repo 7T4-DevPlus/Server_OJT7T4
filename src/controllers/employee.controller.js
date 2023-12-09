@@ -36,7 +36,7 @@ class EmployeeController {
             console.log(newEmployee)
         } catch (error) {
             console.error('Error:', error);
-            res.status(500).json({ success: false, message: 'Internal server error' });
+            res.status(500).json({ success: false, message: 'Internal server error - Employee added failed' });
         }
     }
 
@@ -92,7 +92,7 @@ class EmployeeController {
         }
         catch (error) {
             console.log(error)
-            res.status(500).json({ success: false, message: 'Internal server error' })
+            res.status(500).json({ success: false, message: 'Internal server error - Employee updated failed' })
         }
     }
 
@@ -111,7 +111,7 @@ class EmployeeController {
             res.json({ success: true, message: 'Employee deleted successfully' })
         } catch (error) {
             console.log(error)
-            res.status(404).json({ success: false, message: 'Internal Server Error' })
+            res.status(404).json({ success: false, message: 'Internal Server Error - Employee deleted failed' })
         }
     }
 }

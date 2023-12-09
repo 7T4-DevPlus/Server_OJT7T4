@@ -50,7 +50,7 @@ class EmployeeProjectController {
             console.log(newEmployeeInProject)
         } catch (error) {
             console.log(error)
-            res.status(500).json({ success: false, message: 'Internal server error' })
+            res.status(500).json({ success: false, message: 'Internal server error - Employee added failed' })
         }
     }
 
@@ -58,6 +58,7 @@ class EmployeeProjectController {
         try {
             let removedEmployee = {
                 isWorking: false,
+                outDate: Date.now,
             }
             removedEmployee = await EmployeeProject.findByIdAndUpdate(req.params._id, removedEmployee, { new: true });
 
@@ -72,7 +73,7 @@ class EmployeeProjectController {
             res.json({ success: true, message: 'Employee removed from project successfully' })
         } catch (error) {
             console.log(error)
-            res.status(404).json({ success: false, message: 'Internal Server Error' })
+            res.status(404).json({ success: false, message: 'Internal Server Error - Employee removed failed' })
         }
     }
 }
