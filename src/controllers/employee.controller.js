@@ -8,7 +8,11 @@ class EmployeeController {
         const { name, code, phone, email, identity, gender, technical } = req.body;
 
         try {
-            const image = await cloudinary.uploader.upload(req.file.path);
+            let imageUrl = null;
+            if (req.file) {
+                const image = await cloudinary.uploader.upload(req.file.path);
+                imageUrl = image.secure_url
+            }
 
             const employee = await Employee.findOne({ email });
             if (employee && employee.isDelete == false) {
@@ -22,7 +26,7 @@ class EmployeeController {
                 code,
                 phone,
                 email,
-                image: image.secure_url,
+                image: imageUrl,
                 identity,
                 gender,
                 technical: technicalIds
