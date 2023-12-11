@@ -1,4 +1,5 @@
 const Role = require('../models/role.model');
+const Record = require('../models/record.model');
 
 class RoleController {
     list(res, next) {
@@ -11,7 +12,10 @@ class RoleController {
         const role = new Role(req.body);
         role.save()
         .then(role => {
-            console.log('req.body:',req.body);
+            const newRecord = new Record({
+                record: `create new role ${role.name}`
+            });
+            newRecord.save();
             res.status(200).json('added successfully');
         })
         .catch(err => {
@@ -32,7 +36,12 @@ class RoleController {
             }
             const updateCondition = {_id: req.params._id}
 
-            updatedRole = await Role.findOneAndUpdate(updateCondition, updatedRole, {new: true})
+            updatedRole = await Role.findOneAndUpdate(updateCondition, updatedRole, {new: true});
+
+            const newRecord = new Record({
+                record: `updated role ${name} to ${updatedRole.name}`
+            });
+            newRecord.save();
 
             if(!updatedRole)
             return res.status(401).json({success: false, message: 'Role not found'})
@@ -48,8 +57,13 @@ class RoleController {
 
     async delete (req, res) {
         try {
-            const deleteCondition = {_id: req.params.id}
-            const deletedRole = await Role.findOneAndDelete(deleteCondition)
+            const deleteCondition = {_id: req.params._id}
+            const deletedRole = await Role.findOneAndDelete(deleteCondition);
+
+            const newRecord = new Record({
+                record: `deleted role ${deletedRole.name}`
+            });
+            newRecord.save();
 
             if(!deletedRole)
             return res.status(401).json({success: false, message: 'Role not found'})

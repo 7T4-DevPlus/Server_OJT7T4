@@ -1,5 +1,6 @@
 const { response } = require('express');
 const Project = require('../models/project.model');
+const Record = require('../models/record.model');
 
 class ProjectController {
     async create(req, res) {
@@ -23,6 +24,11 @@ class ProjectController {
             });
 
             await newProject.save();
+
+            const newRecord = new Record({
+                record: `add new project ${newProject.name}`
+            });
+            newRecord.save();
 
             const projects = await Project.find({}).populate('technical');
 
@@ -68,7 +74,12 @@ class ProjectController {
             }
             const updateCondition = { _id: req.params._id }
 
-            updatedProject = await Project.findByIdAndUpdate(updateCondition, updatedProject, { new: true })
+            updatedProject = await Project.findByIdAndUpdate(updateCondition, updatedProject, { new: true });
+
+            const newRecord = new Record({
+                record: `update project ${updatedProject.name} information`
+            });
+            newRecord.save();
 
             if (!updatedProject)
                 return res.status(401).json({ success: false, message: 'Project not found' })
@@ -89,7 +100,12 @@ class ProjectController {
                 isActive: false,
             }
 
-            closedProject = await Project.findByIdAndUpdate(projectId, closedProject, { new: true })
+            closedProject = await Project.findByIdAndUpdate(projectId, closedProject, { new: true });
+
+            const newRecord = new Record({
+                record: `closed project ${closedProject.name}`
+            });
+            newRecord.save();
 
             if (!closedProject)
                 return res.status(401).json({ success: false, message: 'Project not found' })
