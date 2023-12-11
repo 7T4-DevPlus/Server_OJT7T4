@@ -17,7 +17,7 @@ class EmployeeProjectController {
     async getEmployeeInProject(req, res) {
         const projectId = req.params._id;
         try {
-            const employees = await EmployeeProject.find({projectId: projectId}).populate('role').populate('employeeId').populate('projectId');
+            const employees = await EmployeeProject.find({projectId: projectId, isWorking: true}).populate('role').populate('employeeId').populate('projectId');
             res.json({ success: true, employees })
         } catch (error) {
             console.log(error)
@@ -29,6 +29,10 @@ class EmployeeProjectController {
         const {description, joinDate, outDate, role, employeeId, projectId} = req.body;
         console.log(req.body);
         try {
+            const checkEmployee = Employee.findOne({_id: employeeId});
+            if(!checkEmployee.isAvailable)
+                return  res.status(500).json({ success: false, message: 'Employee is not avaiable!' });
+            
             const newEmployeeInProject = new EmployeeProject({
                 description,
                 joinDate,
@@ -58,8 +62,10 @@ class EmployeeProjectController {
         try {
             let removedEmployee = {
                 isWorking: false,
-                outDate: Date.now,
+                outDate: Date.now(),
             }
+            const employeeProject = await EmployeeProject.findOne({_id: req.params._id});
+            const employeeId = employeeProject.employeeId;
             removedEmployee = await EmployeeProject.findByIdAndUpdate(req.params._id, removedEmployee, { new: true });
 
             let updatedEmployee = {
