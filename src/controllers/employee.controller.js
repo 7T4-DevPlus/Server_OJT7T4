@@ -2,6 +2,7 @@ const { response } = require('express');
 const multer = require("multer");
 const cloudinary = require("../utils/cloudinary");
 const Employee = require('../models/employee.model');
+const Record = require('../models/record.model');
 
 class EmployeeController {
     async create(req, res) {
@@ -33,6 +34,11 @@ class EmployeeController {
             });
 
             await newEmployee.save();
+
+            const newRecord = new Record({
+                record: `add new employee ${newEmployee.name}`
+            });
+            newRecord.save();
 
             const employees = await Employee.find({isDelete: false}).populate('technical');
 
@@ -86,7 +92,12 @@ class EmployeeController {
             }
             const updateCondition = { _id: req.params._id }
 
-            updatedEmployee = await Employee.findByIdAndUpdate(updateCondition, updatedEmployee, { new: true })
+            updatedEmployee = await Employee.findByIdAndUpdate(updateCondition, updatedEmployee, { new: true });
+
+            const newRecord = new Record({
+                record: `updated employee ${name} information`
+            });
+            newRecord.save();
 
             if (!updatedEmployee)
                 return res.status(401).json({ success: false, message: 'Employee not found' })
@@ -107,7 +118,12 @@ class EmployeeController {
                 isDelete: true,
             }
 
-            deletedEmployee = await Employee.findByIdAndUpdate(employeeId, deletedEmployee, { new: true })
+            deletedEmployee = await Employee.findByIdAndUpdate(employeeId, deletedEmployee, { new: true });
+
+            const newRecord = new Record({
+                record: `removed employee ${deletedEmployee.name}`
+            });
+            newRecord.save();
 
             if (!deletedEmployee)
                 return res.status(401).json({ success: false, message: 'Employee not found' })

@@ -1,4 +1,5 @@
 const Technical = require('../models/technical.model');
+const Record = require('../models/record.model');
 
 class TechController {
     async list(req, res) {
@@ -15,8 +16,11 @@ class TechController {
         const technical = new Technical(req.body);
         technical.save()
         .then(tech => {
-            console.log('req.body:',req.body);
-            res.status(200).json('added successfully');
+            const newRecord = new Record({
+                record: `create new technical ${technical.name}`
+            });
+            newRecord.save();
+            res.status(200).json({message: 'added successfully'});
         })
         .catch(err => {
             res.status(400).send("unable to save to database");
@@ -41,6 +45,11 @@ class TechController {
             if(!updatedTechnical)
             return res.status(401).json({success: false, message: 'Technical not found'})
 
+            const newRecord = new Record({
+                record: `updated technical ${name} to ${updatedTechnical.name}`
+            });
+            newRecord.save();
+
             res.json({success: true, message: 'Technical updated successfully'})
 
         }
@@ -52,8 +61,13 @@ class TechController {
 
     async delete (req, res) {
         try {
-            const deleteCondition = {_id: req.params.id}
+            const deleteCondition = {_id: req.params._id}
             const deletedTechnical = await Technical.findOneAndDelete(deleteCondition)
+
+            const newRecord = new Record({
+                record: `deleted technical ${deletedTechnical.name}`
+            });
+            newRecord.save();
 
             if(!deletedTechnical)
             return res.status(401).json({success: false, message: 'Technical not found'})

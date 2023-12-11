@@ -1,6 +1,9 @@
 const { response } = require('express');
 const EmployeeProject = require('../models/employeeProject.model');
 const Employee = require('../models/employee.model');
+const Project = require('../models/project.model');
+const Role = require('../models/role.model');
+const Record = require('../models/record.model');
 
 class EmployeeProjectController {
     async getEmployeeHistory(req, res) {
@@ -32,6 +35,8 @@ class EmployeeProjectController {
             if(!checkEmployee.isAvailable){
                 return  res.status(500).json({ success: false, message: 'Employee is not avaiable!' });
             }
+            const project = await Project.findOne({_id: projectId});
+            const position = await Role.findOne({_id: role});
             
             const newEmployeeInProject = new EmployeeProject({
                 description,
@@ -42,6 +47,11 @@ class EmployeeProjectController {
                 projectId,
             });
             await newEmployeeInProject.save();
+
+            const newRecord = new Record({
+                record: `added employee ${checkEmployee.name} to project ${project.name} with position ${position.name}`
+            });
+            newRecord.save();
 
             let updatedEmployee = {
                 isAvailable: false,
@@ -64,14 +74,20 @@ class EmployeeProjectController {
                 isWorking: false,
                 outDate: Date.now(),
             }
-            const employeeProject = await EmployeeProject.findOne({_id: req.params._id});
-            const employeeId = employeeProject.employeeId;
             removedEmployee = await EmployeeProject.findByIdAndUpdate(req.params._id, removedEmployee, { new: true });
+
+            const employeeProject = await EmployeeProject.findOne({_id: req.params._id}).populate('employeeId').populate('projectId');
+            const employeeId = employeeProject.employeeId;
 
             let updatedEmployee = {
                 isAvailable: true,
             }
             updatedEmployee = await Employee.findByIdAndUpdate(employeeId, updatedEmployee, { new: true });
+
+            const newRecord = new Record({
+                record: `removed employee ${updatedEmployee.name} form project ${employeeProject.projectId.name}`
+            });
+            newRecord.save();
 
             if (!removedEmployee)
                 return res.status(401).json({ success: false, message: 'Employee not found' })
