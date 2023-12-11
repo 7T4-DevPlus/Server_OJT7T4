@@ -27,11 +27,11 @@ class EmployeeProjectController {
 
     async addEmployee(req, res) {
         const {description, joinDate, outDate, role, employeeId, projectId} = req.body;
-        console.log(req.body);
         try {
-            const checkEmployee = Employee.findOne({_id: employeeId});
-            if(!checkEmployee.isAvailable)
+            const checkEmployee = await Employee.findOne({_id: employeeId});
+            if(!checkEmployee.isAvailable){
                 return  res.status(500).json({ success: false, message: 'Employee is not avaiable!' });
+            }
             
             const newEmployeeInProject = new EmployeeProject({
                 description,
