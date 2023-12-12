@@ -61,7 +61,11 @@ class ProjectController {
 
         const project = await Project.find({ _id: req.params._id });
         
-        const technicalIds = JSON.parse(technical);
+        let technicalIds = project.technical;
+
+        if(technical){
+            technicalIds = JSON.parse(technical);
+        }
 
         try {
             let updatedProject = {
@@ -70,7 +74,7 @@ class ProjectController {
                 startDate: startDate || project.startDate,
                 endDate: endDate || project.endDate,
                 status: status || project.status,
-                technical: technicalIds || project.technical,
+                technical: technicalIds,
             }
             const updateCondition = { _id: req.params._id }
 

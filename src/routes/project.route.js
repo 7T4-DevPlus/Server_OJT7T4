@@ -8,8 +8,8 @@ const employeeProjectController = require('../controllers/employeeProject.contro
 
 router.get('/', controller.list);
 router.get('/:_id', controller.details);
-router.post('/create', controller.create);
-router.patch('/update/:_id', controller.update);
+router.post('/create', upload.none(), controller.create);
+router.patch('/update/:_id', upload.none(), controller.update);
 router.patch('/close/:_id', controller.close);
 
 router.get('/getEmployees/:_id', employeeProjectController.getEmployeeInProject);
