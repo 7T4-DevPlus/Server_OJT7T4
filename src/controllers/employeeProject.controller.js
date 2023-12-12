@@ -59,7 +59,7 @@ class EmployeeProjectController {
             }
             updatedEmployee = await Employee.findByIdAndUpdate(employeeId, updatedEmployee, { new: true });
 
-            const employees = await EmployeeProject.find({projectId: projectId}).populate('role').populate('employeeId').populate('projectId');
+            const employees = await EmployeeProject.find({projectId: projectId, isWorking: true}).populate('role').populate('employeeId').populate('projectId');
 
             res.json({ success: true, message: 'Employee added successfully', employees: employees });
             console.log(newEmployeeInProject)
