@@ -2,10 +2,14 @@ const Role = require('../models/role.model');
 const Record = require('../models/record.model');
 
 class RoleController {
-    list(res, next) {
-        Role.find({})
-        .then(roles => res.json({success: true, roles}))
-        .catch(err => next(err));
+    async list(req, res) {
+        try {
+            const roles = await Role.find({});
+            res.json({ success: true, roles })
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({ success: false, message: 'Internal server error' })
+        }
     }
 
     create(req, res) {
