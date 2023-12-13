@@ -36,7 +36,9 @@ class EmployeeController {
             await newEmployee.save();
 
             const newRecord = new Record({
-                record: `add new employee ${newEmployee.name}`
+                record: `add new employee ${newEmployee.name}`,
+                type: "create",
+                object: "employee"
             });
             newRecord.save();
 
@@ -95,7 +97,9 @@ class EmployeeController {
             updatedEmployee = await Employee.findByIdAndUpdate(updateCondition, updatedEmployee, { new: true });
 
             const newRecord = new Record({
-                record: `updated employee ${name} information`
+                record: `updated employee ${name} information`,
+                type: "update",
+                object: "employee"
             });
             newRecord.save();
 
@@ -121,7 +125,9 @@ class EmployeeController {
             deletedEmployee = await Employee.findByIdAndUpdate(employeeId, deletedEmployee, { new: true });
 
             const newRecord = new Record({
-                record: `removed employee ${deletedEmployee.name}`
+                record: `removed employee ${deletedEmployee.name}`,
+                type: "delete",
+                object: "employee"
             });
             newRecord.save();
 

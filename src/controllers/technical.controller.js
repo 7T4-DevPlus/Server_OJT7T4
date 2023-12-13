@@ -17,7 +17,9 @@ class TechController {
         technical.save()
         .then(tech => {
             const newRecord = new Record({
-                record: `create new technical ${technical.name}`
+                record: `create new technical ${technical.name}`,
+                type: "create",
+                object: "technical"
             });
             newRecord.save();
             res.status(200).json({message: 'added successfully'});
@@ -46,7 +48,9 @@ class TechController {
             return res.status(401).json({success: false, message: 'Technical not found'})
 
             const newRecord = new Record({
-                record: `updated technical ${name} to ${updatedTechnical.name}`
+                record: `updated technical ${name} to ${updatedTechnical.name}`,
+                type: "update",
+                object: "technical"
             });
             newRecord.save();
 
@@ -65,7 +69,9 @@ class TechController {
             const deletedTechnical = await Technical.findOneAndDelete(deleteCondition)
 
             const newRecord = new Record({
-                record: `deleted technical ${deletedTechnical.name}`
+                record: `deleted technical ${deletedTechnical.name}`,
+                type: "update",
+                object: "technical"
             });
             newRecord.save();
 

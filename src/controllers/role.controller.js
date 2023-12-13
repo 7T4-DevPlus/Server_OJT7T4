@@ -17,7 +17,9 @@ class RoleController {
         role.save()
         .then(role => {
             const newRecord = new Record({
-                record: `create new role ${role.name}`
+                record: `create new role ${role.name}`,
+                type: "create",
+                object: "role"
             });
             newRecord.save();
             res.status(200).json('added successfully');
@@ -43,7 +45,9 @@ class RoleController {
             updatedRole = await Role.findOneAndUpdate(updateCondition, updatedRole, {new: true});
 
             const newRecord = new Record({
-                record: `updated role ${name} to ${updatedRole.name}`
+                record: `updated role ${name} to ${updatedRole.name}`,
+                type: "update",
+                object: "role"
             });
             newRecord.save();
 
@@ -65,7 +69,9 @@ class RoleController {
             const deletedRole = await Role.findOneAndDelete(deleteCondition);
 
             const newRecord = new Record({
-                record: `deleted role ${deletedRole.name}`
+                record: `deleted role ${deletedRole.name}`,
+                type: "delete",
+                object: "role"
             });
             newRecord.save();
 

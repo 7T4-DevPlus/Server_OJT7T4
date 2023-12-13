@@ -50,7 +50,9 @@ class EmployeeProjectController {
             await newEmployeeInProject.save();
 
             const newRecord = new Record({
-                record: `added employee ${checkEmployee.name} to project ${project.name} with position ${position.name}`
+                record: `added employee ${checkEmployee.name} to project ${project.name} with position ${position.name}`,
+                type: "update",
+                object: "project"
             });
             newRecord.save();
 
@@ -86,7 +88,9 @@ class EmployeeProjectController {
             updatedEmployee = await Employee.findByIdAndUpdate(employeeId, updatedEmployee, { new: true });
 
             const newRecord = new Record({
-                record: `removed employee ${updatedEmployee.name} form project ${employeeProject.projectId.name}`
+                record: `removed employee ${updatedEmployee.name} form project ${employeeProject.projectId.name}`,
+                type: "update",
+                object: "project"
             });
             newRecord.save();
 

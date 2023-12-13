@@ -26,7 +26,9 @@ class ProjectController {
             await newProject.save();
 
             const newRecord = new Record({
-                record: `add new project ${newProject.name}`
+                record: `add new project ${newProject.name}`,
+                type: "create",
+                object: "project"
             });
             newRecord.save();
 
@@ -81,7 +83,9 @@ class ProjectController {
             updatedProject = await Project.findByIdAndUpdate(updateCondition, updatedProject, { new: true });
 
             const newRecord = new Record({
-                record: `update project ${updatedProject.name} information`
+                record: `update project ${updatedProject.name} information`,
+                type: "update",
+                object: "project"
             });
             newRecord.save();
 
@@ -107,7 +111,9 @@ class ProjectController {
             closedProject = await Project.findByIdAndUpdate(projectId, closedProject, { new: true });
 
             const newRecord = new Record({
-                record: `closed project ${closedProject.name}`
+                record: `closed project ${closedProject.name}`,
+                type: "delete",
+                object: "project"
             });
             newRecord.save();
 

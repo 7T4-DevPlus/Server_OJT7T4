@@ -9,6 +9,13 @@ const Record = new Schema({
     record: {
         type: String,
         required: true
+    },
+    type: {
+        type: String,
+        default: "default"
+    },
+    object: {
+        type: String
     }
 })
 
