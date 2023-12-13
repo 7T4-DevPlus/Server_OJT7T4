@@ -103,7 +103,8 @@ class ProjectController {
 
     async close(req, res) {
         try {
-            const projectId = { _id: req.params._id }
+            const projectId = { _id: req.params._id };
+            console.log(projectId);
             let closedProject = {
                 isActive: false,
                 status: "Closed"
