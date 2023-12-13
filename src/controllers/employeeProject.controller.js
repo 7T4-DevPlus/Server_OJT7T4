@@ -23,15 +23,12 @@ class EmployeeProjectController {
             const employees = await EmployeeProject.find({
                 projectId: projectId
             })
-            .populate({
-                path: 'employeeId'
-            })
+            .populate('employeeId')
             .populate('role')
             .populate('projectId');
     
-            const filteredEmployees = employees.filter(emp => emp.employeeId);
     
-            res.json({ success: true, employees: filteredEmployees });
+            res.json({ success: true, employees: employees });
         } catch (error) {
             console.log(error);
             res.status(500).json({ success: false, message: 'Internal server error' });
