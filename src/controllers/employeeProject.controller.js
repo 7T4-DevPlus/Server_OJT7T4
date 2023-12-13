@@ -27,7 +27,6 @@ class EmployeeProjectController {
             .populate('role')
             .populate('projectId');
     
-    
             res.json({ success: true, employees: employees });
         } catch (error) {
             console.log(error);

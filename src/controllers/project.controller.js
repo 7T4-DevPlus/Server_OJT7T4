@@ -106,6 +106,7 @@ class ProjectController {
             const projectId = { _id: req.params._id }
             let closedProject = {
                 isActive: false,
+                status: "Closed"
             }
 
             closedProject = await Project.findByIdAndUpdate(projectId, closedProject, { new: true });
