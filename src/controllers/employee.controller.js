@@ -15,12 +15,12 @@ class EmployeeController {
                 imageUrl = image.secure_url
             }
 
+            const technicalIds = JSON.parse(technical);
+
             const employee = await Employee.findOne({ email });
             if (employee && employee.isDelete == false) {
                 return res.status(400).json({ success: false, message: 'Employee already exists' });
             }
-
-            const technicalIds = JSON.parse(technical);
 
             const newEmployee = new Employee({
                 name,
@@ -40,7 +40,7 @@ class EmployeeController {
             });
             newRecord.save();
 
-            const employees = await Employee.find({isDelete: false}).populate('technical');
+            const employees = await Employee.find({isDelete: false}).populate('technical.technicalId');
 
             res.json({ success: true, message: 'Employee added successfully', employees: employees });
             console.log(newEmployee)
@@ -52,7 +52,7 @@ class EmployeeController {
 
     async list(req, res) {
         try {
-            const employees = await Employee.find({isDelete: false}).populate('technical');
+            const employees = await Employee.find({isDelete: false}).populate('technical.technicalId');
             res.json({ success: true, employees })
         } catch (error) {
             console.log(error)
@@ -61,7 +61,7 @@ class EmployeeController {
     }
 
     details(req, res, next) {
-        Employee.findOne({ _id: req.params._id }).populate('technical')
+        Employee.findOne({ _id: req.params._id }).populate('technical.technicalId')
             .then(employee => res.json(employee))
             .catch(err => next(err));
     }

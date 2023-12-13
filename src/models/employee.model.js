@@ -51,10 +51,23 @@ const Employee = new Schema({
         type: Date, 
         default: Date.now
     },
-    technical: [{
-        type: Schema.Types.ObjectId, 
-        ref: Technical
-    }],
+    technical: [
+        {
+            technicalId: {
+                type: Schema.Types.ObjectId,
+                ref: Technical
+            },
+            point: {
+                type: Number,
+                default: 0
+            }
+        }
+    ],
 })
+
+Employee.pre('findOne', function (next) {
+    this.populate('technical.technicalId', 'name');
+    next();
+});
 
 module.exports = mongoose.model('Employee', Employee);
