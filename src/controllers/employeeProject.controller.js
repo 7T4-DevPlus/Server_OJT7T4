@@ -21,12 +21,10 @@ class EmployeeProjectController {
         const projectId = req.params._id;
         try {
             const employees = await EmployeeProject.find({
-                projectId: projectId,
-                isWorking: true,
+                projectId: projectId
             })
             .populate({
-                path: 'employeeId',
-                match: { isDelete: false },
+                path: 'employeeId'
             })
             .populate('role')
             .populate('projectId');

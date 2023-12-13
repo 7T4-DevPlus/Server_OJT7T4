@@ -9,18 +9,15 @@ const Employee = new Schema({
     },
     code: {
         type: String,
-        required: true,
-        unique: true
+        required: true
     },
     phone: {
         type: String,
-        required: true,
-        unique: true
+        required: true
     },
     email: {
         type: String,
-        required: true,
-        unique: true
+        required: true
     },
     image: {
         type: String,
@@ -28,8 +25,7 @@ const Employee = new Schema({
     },
     identity: {
         type: String,
-        required: true,
-        unique: true
+        required: true
     },
     gender: {
         type: String,
