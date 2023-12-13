@@ -20,11 +20,23 @@ class EmployeeProjectController {
     async getEmployeeInProject(req, res) {
         const projectId = req.params._id;
         try {
-            const employees = await EmployeeProject.find({projectId: projectId, isWorking: true}).populate('role').populate('employeeId').populate('projectId');
-            res.json({ success: true, employees })
+            const employees = await EmployeeProject.find({
+                projectId: projectId,
+                isWorking: true,
+            })
+            .populate({
+                path: 'employeeId',
+                match: { isDelete: false },
+            })
+            .populate('role')
+            .populate('projectId');
+    
+            const filteredEmployees = employees.filter(emp => emp.employeeId);
+    
+            res.json({ success: true, employees: filteredEmployees });
         } catch (error) {
-            console.log(error)
-            res.status(500).json({ success: false, message: 'Internal server error' })
+            console.log(error);
+            res.status(500).json({ success: false, message: 'Internal server error' });
         }
     }
 
