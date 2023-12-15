@@ -20,7 +20,6 @@ class EmployeeProjectController {
     async list(req, res) {
         try {
             const employees = await EmployeeProject.find({}).populate('role').populate('projectId').populate('employeeId');
-            console.log(employees);
     
             res.json({ success: true, employees });
         } catch (error) {
