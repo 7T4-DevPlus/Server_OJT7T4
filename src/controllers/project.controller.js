@@ -107,7 +107,8 @@ class ProjectController {
             console.log(projectId);
             let closedProject = {
                 isActive: false,
-                status: "Closed"
+                status: "Closed",
+                endDate: Date.now()
             }
 
             closedProject = await Project.findByIdAndUpdate(projectId, closedProject, { new: true });
