@@ -9,8 +9,20 @@ class EmployeeProjectController {
     async getEmployeeHistory(req, res) {
         const employeeId = req.params._id;
         try {
-            const histories = await EmployeeProject.find({employeeId: employeeId}).populate('role').populate('projectId').populate('employeeId')
+            const histories = await EmployeeProject.find({employeeId: employeeId}).populate('role').populate('projectId').populate('employeeId');
             res.json({ success: true, histories })
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({ success: false, message: 'Internal server error' })
+        }
+    }
+
+    async list(req, res) {
+        try {
+            const employees = await EmployeeProject.find({}).populate('role').populate('projectId').populate('employeeId');
+            console.log(employees);
+    
+            res.json({ success: true, employees });
         } catch (error) {
             console.log(error)
             res.status(500).json({ success: false, message: 'Internal server error' })
