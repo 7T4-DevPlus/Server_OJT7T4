@@ -2,7 +2,13 @@ const { response } = require('express');
 const multer = require("multer");
 const cloudinary = require("../utils/cloudinary");
 const Employee = require('../models/employee.model');
+const EmployeeProject = require('../models/employeeProject.model');
 const Record = require('../models/record.model');
+
+
+const fs = require('fs');
+const Docxtemplater = require('docxtemplater');
+const PizZip = require('pizzip');
 
 class EmployeeController {
     async create(req, res) {
@@ -138,6 +144,44 @@ class EmployeeController {
         } catch (error) {
             console.log(error)
             res.status(404).json({ success: false, message: 'Internal Server Error - Employee deleted failed' })
+        }
+    }
+
+    async export(req, res) {
+        const employeeId = req.params._id;
+        try {
+            const histories = await EmployeeProject.find({employeeId: employeeId}).populate('role').populate('projectId');
+            const employee = await Employee.findOne({_id: employeeId}).populate('technical.technicalId');
+            const data = {
+                name: employee.name,
+                phone: employee.phone,
+                email: employee.email,
+                identity: employee.identity,
+                image: employee.image,
+                technical: employee.technical,
+                histories: histories,
+            }
+            // console.log(data);
+            // res.json({ success: true, data });
+
+            const templateContent = fs.readFileSync(__dirname + '/template.docx', 'binary');
+            const doc = new Docxtemplater();
+            doc.loadZip(new PizZip(templateContent));
+            doc.setData(data);
+            doc.render();
+            const buffer = doc.getZip().generate({ type: 'nodebuffer' });
+            fs.writeFileSync(`${employee.name}.docx`, buffer);
+
+            res.download(`${employee.name}.docx`, `${employee.name}.docx`, (err) => {
+                if (err) {
+                    console.error(err);
+                    res.status(500).send('Internal Server Error');
+                }
+            });
+
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({ success: false, message: 'Internal server error' })
         }
     }
 }

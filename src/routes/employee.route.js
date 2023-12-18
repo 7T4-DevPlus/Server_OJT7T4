@@ -11,6 +11,7 @@ router.get('/:_id', controller.details);
 router.post('/create', upload.single("image"), controller.create);
 router.patch('/update/:_id', upload.single("image"), controller.update);
 router.patch('/delete/:_id', controller.delete);
+router.get('/export/:_id', controller.export);
 
 router.get('/history/:_id', employeeProjectController.getEmployeeHistory);
 
