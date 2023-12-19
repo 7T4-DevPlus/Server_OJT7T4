@@ -150,7 +150,15 @@ class EmployeeController {
     async export(req, res) {
         const employeeId = req.params._id;
         try {
-            const histories = await EmployeeProject.find({employeeId: employeeId}).populate('role').populate('projectId');
+            // const histories = await EmployeeProject.find({employeeId: employeeId}).populate('role').populate('projectId').populate('projectId.technical');
+            const histories = await EmployeeProject.find({ employeeId: employeeId })
+                .populate('role')
+                .populate({
+                    path: 'projectId',
+                    populate: {
+                        path: 'technical',
+                    }
+                });
             const employee = await Employee.findOne({_id: employeeId}).populate('technical.technicalId');
             const data = {
                 name: employee.name,
