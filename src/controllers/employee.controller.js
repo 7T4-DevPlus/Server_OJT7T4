@@ -169,8 +169,6 @@ class EmployeeController {
                 technical: employee.technical,
                 histories: histories,
             }
-            // console.log(data);
-            // res.json({ success: true, data });
 
             const templateContent = fs.readFileSync(__dirname + '/template.docx', 'binary');
             const doc = new Docxtemplater();
