@@ -21,7 +21,7 @@ const Employee = new Schema({
     },
     image: {
         type: String,
-        default: "https://res.cloudinary.com/dfz0xsh2d/image/upload/v1701956118/zdrwpmaiuojwpkzmaei5.png"
+        default: "https://res.cloudinary.com/dfz0xsh2d/image/upload/v1703096540/cfswbytmsqn8wwfzxbog.png"
     },
     identity: {
         type: String,
