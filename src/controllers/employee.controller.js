@@ -4,6 +4,7 @@ const cloudinary = require("../utils/cloudinary");
 const Employee = require('../models/employee.model');
 const EmployeeProject = require('../models/employeeProject.model');
 const Record = require('../models/record.model');
+const moment = require('moment');
 
 
 const fs = require('fs');
@@ -150,7 +151,6 @@ class EmployeeController {
     async export(req, res) {
         const employeeId = req.params._id;
         try {
-            // const histories = await EmployeeProject.find({employeeId: employeeId}).populate('role').populate('projectId').populate('projectId.technical');
             const histories = await EmployeeProject.find({ employeeId: employeeId })
                 .populate('role')
                 .populate({
@@ -160,6 +160,14 @@ class EmployeeController {
                     }
                 });
             const employee = await Employee.findOne({_id: employeeId}).populate('technical.technicalId');
+
+            histories.forEach(history => {
+                history.joinDateFormatted = moment(history.joinDate).format('YYYY-MM-DD');
+                if(history.outDate) {
+                    history.outDateFormatted = moment(history.outDate).format('YYYY-MM-DD');
+                }
+            });
+
             const data = {
                 name: employee.name,
                 phone: employee.phone,
